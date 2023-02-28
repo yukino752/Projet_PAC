@@ -72,12 +72,34 @@ class temperatureThermocouple
 
     float TempVentilateur(){
         Serial.print("temperatureEntreeDetendeur");
-        Serial.println(thermocouple.readCelsius());
+        Serial.println(thermocouple1.readCelsius());
         delay(1000);
 
         Serial.print("temperatureSortieDetendeur"); 
-        Serial.println(thermocouple1.readCelsius());
+        Serial.println(thermocouple2.readCelsius());
         delay(1000);
+
+        /*Serial.print("temperatureEntreeCompresseur"); 
+        Serial.println(thermocouple3.readCelsius());
+        delay(1000);
+
+        Serial.print("temperatureSortieCompresseur"); 
+        Serial.println(thermocouple4.readCelsius());
+        delay(1000);
+
+        Serial.print("temperatureEntreeCondenseur"); 
+        Serial.println(thermocouple5.readCelsius());
+        delay(1000);
+
+        Serial.print("temperatureSortieCondenseur"); 
+        Serial.println(thermocouple6.readCelsius());
+        delay(1000);
+
+        Serial.print("temperatureSortieEvaporateur"); 
+        Serial.println(thermocouple7.readCelsius());
+        delay(1000);*/
+
+        
     }
 
 };
@@ -94,11 +116,11 @@ void loop() {
   TT.TempVentilateur();
   delay(500);
   float ValeurPression = analogRead(pression);
-  //////Serial.print("Pression : ");
-  //////Serial.println(ValeurPression*5/1023);
+  Serial.print("Pression : ");
+  Serial.println(ValeurPression*5/1023);
   /*//THERMOCOUPLE MAX6675
   //Serial.print("x"); 
-  Serial.print(thermocouple.readCelsius());
+  Serial.print(thermocouple.readCelsius());2
   Serial.print("x");
   delay(1000);
 
