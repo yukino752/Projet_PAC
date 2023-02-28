@@ -4,14 +4,14 @@
 
 
 //THERMOCOUPLE
-int thermoSO = 4;
-int thermoCS = 5;
-int thermoSCK = 6;
+int thermoSO1 = 4;
+int thermoCS1 = 5;
+int thermoSCK1 = 6;
 
 //THERMOCOUPLE 1
-int thermoSO1 = 29;
-int thermoCS1 = 30;
-int thermoSCK1 = 31;
+int thermoSO2 = 29;
+int thermoCS2 = 30;
+int thermoSCK2 = 31;
 
 const int pression = A15;
 
@@ -30,8 +30,8 @@ const float T0 = 269.15;
 
 
 
-MAX6675 thermocouple(thermoSCK, thermoCS, thermoSO);
 MAX6675 thermocouple1(thermoSCK1, thermoCS1, thermoSO1);
+MAX6675 thermocouple2(thermoSCK2, thermoCS2, thermoSO2);
 
 
 class temperature
