@@ -13,7 +13,10 @@ int thermoSO2 = 29;
 int thermoCS2 = 30;
 int thermoSCK2 = 31;
 
-const int pression = A15;
+//CAPTEURS PRESSION
+const int capteurPression1 = A14;
+const int capteurPression2 = A15;
+
 
 //THERMISTANCE
 const int B = 4275;
@@ -115,12 +118,20 @@ temperatureThermocouple TT;
 void loop() {
   TT.TempVentilateur();
   delay(500);
-  float ValeurPression = analogRead(pression);
-  Serial.print("Pression : ");
-  Serial.println(ValeurPression*5/1023);
+
+  float pression1 = analogRead(capteurPression1);
+  Serial.print("Pression1 (V) : ");
+  Serial.println(pression1*5/1023);
+
+  /*float pression2 = analogRead(capteurPression2);
+  Serial.print("Pression2 (V) : ");
+  Serial.println(pression2*5/1023);*/
+
+
+
   /*//THERMOCOUPLE MAX6675
   //Serial.print("x"); 
-  Serial.print(thermocouple.readCelsius());2
+  Serial.print(thermocouple.readCelsius());
   Serial.print("x");
   delay(1000);
 
