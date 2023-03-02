@@ -3,7 +3,8 @@ import mysql.connector
 def connectDB (): 
     db = mysql.connector.connect( 
         host="localhost", 
-        user="root",  
+        user="root",
+        password="azerty123",
         database="BDD_PAC" ) 
     return db
 
@@ -27,9 +28,9 @@ def Evaporateur (cur, TempEntree, TempSortie, nom_Capteur):
     curso.execute ("INSERT INTO donnees_recu (Temperature_Entree, Temperature_Sortie, Capteur_nom) VALUES (%s, %s, %s);", (TempEntree, TempSortie, nom_Capteur))
     cur.commit()
 
-def Eau (cur, TempAvant, TempApres, nom_Capteur):
+def Eau (cur, TempAvant, TempApres):
     curso = cur.cursor()
-    curso.execute ("INSERT INTO donnees_recu (Temperature_Avant, Temperature_Apres, Capteur_nom) VALUES (%s, %s, %s);", (TempAvant, TempApres, nom_Capteur))
+    curso.execute ("INSERT INTO donnees_recu (Temperature_Avant, Temperature_Apres, Capteur_nom) VALUES (%s, %s, 'Eau');", (TempAvant, TempApres))
     cur.commit()
 
 def Tension (cur, Volt1, nom_Capteur):
@@ -50,7 +51,7 @@ HautePression = 18
 BassePression = 9
 Volt1 = 8
 Ampere1 = 6
-nom_Capteur = "Intensite"
+nom_Capteur = "Eau"
 
 cur = connectDB ()
 
@@ -63,7 +64,7 @@ elif nom_Capteur == 'Condenseur':
 elif nom_Capteur == 'Evaporateur':
     Evaporateur(cur, TempEntree, TempSortie, nom_Capteur)
 elif nom_Capteur == 'Eau':
-    Eau(cur, TempAvant, TempApres, nom_Capteur)
+    Eau(cur, TempAvant, TempApres)
 elif nom_Capteur == 'Tension':
     Tension(cur, Volt1, nom_Capteur)
 else :
