@@ -123,9 +123,9 @@ void loop() {
   Serial.print("Pression1 (V) : ");
   Serial.println(pression1*5/1023);
 
-  /*float pression2 = analogRead(capteurPression2);
+  float pression2 = analogRead(capteurPression2);
   Serial.print("Pression2 (V) : ");
-  Serial.println(pression2*5/1023);*/
+  Serial.println(pression2*5/552);
 
 
 
