@@ -35,8 +35,7 @@ def Create_Table ():
                         id INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
                         fk_id_releve INTEGER,
                         fk_id_capteur INTEGER,
-                        valeur_entree FLOAT,
-                        valeur_sortie FLOAT,
+                        valeur FLOAT,
                         FOREIGN KEY (fk_id_releve) REFERENCES Releve (id),
                         FOREIGN KEY (fk_id_capteur) REFERENCES Capteur (id)
                     );""")
