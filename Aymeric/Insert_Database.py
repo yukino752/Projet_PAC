@@ -49,6 +49,11 @@ def Intensite (cur, Ampere1):
     curso.execute ("INSERT INTO donnees_recu (Ampere, Capteur_nom) VALUES ('" + str(Ampere1) + "', 'Intensite');")
     cur.commit()
 """
+def Releve():
+    conn = connectDB()
+    cursor = conn.cursor()
+    cursor.execute ("INSERT INTO releve (date) VALUES (CURRENT_TIMESTAMP);")
+    conn.commit()
 
 TempEntree = 10.2
 TempSortie = 10.1
@@ -64,7 +69,7 @@ id_capteur = 1
 id_releve = 2
 
 Detendeur(Valeur, id_capteur, id_releve)
-
+Releve()
 
 """
 if nom_Capteur == 'Compresseur':
