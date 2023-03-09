@@ -1,11 +1,16 @@
 import mysql.connector 
 
+############ Connection à la bdd ############
+
 def connectDB (): 
     db = mysql.connector.connect( 
         host="localhost", 
         user="root",
         database="BDD_PAC" )
     return db
+
+#########################################################################################################
+############ Création de la base de données avec ces différentes tables ############
 
 def Create_Table ():
     conn = connectDB()
@@ -55,5 +60,8 @@ def Create_Table ():
     
     conn.commit()
 
+#########################################################################################################
 
+"""
 Create_Table()
+"""
