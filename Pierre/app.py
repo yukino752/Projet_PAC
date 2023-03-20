@@ -87,24 +87,34 @@ def generateTable():
     #le contenu des lignes
     row8 = html.Tr([html.Td("Sortie du detenteur (T6)"), html.Td(
         "6"), html.Td(QueryRequest(cursor, 8)), html.Td("°C")])
+    #On récupere la mesure de la sortie du detenteur (ID 8) avec la fonction QueryResquest et la met dans une cellule de la table
     row1 = html.Tr([html.Td("Haute Pression (HP)"), html.Td(
         "1"), html.Td(QueryRequest(cursor, 1)), html.Td("Bar")])
+    #On récupere la mesure de la haute pression (ID 1) avec la fonction QueryResquest et la met dans une cellule de la table
     row2 = html.Tr([html.Td("Basse Pression (BP)"), html.Td(
         "2"), html.Td(QueryRequest(cursor, 2)), html.Td("Bar")])
+    #On récupere la mesure de la basse pression (ID 2) avec la fonction QueryResquest et la met dans une cellule de la table
     row3 = html.Tr([html.Td("Entrée du compresseur (T1)"), html.Td(
         "1"), html.Td(QueryRequest(cursor, 3)), html.Td("°C")])
+    #On récupere la mesure de l'entrée du compresseur (ID 3) avec la fonction QueryResquest  et la met dans une cellule de la table
     row4 = html.Tr([html.Td("Sortie du compresseur (T2)"), html.Td(
         "2"), html.Td(QueryRequest(cursor, 4)), html.Td("°C")])
+    #On récupere la mesure de la sortie du compresseur (ID 4) avec la fonction QueryResquest  et la met dans une cellule de la table
     row5 = html.Tr([html.Td("Entrée du condenseur (T3)"), html.Td(
         "3"), html.Td(QueryRequest(cursor, 5)), html.Td("°C")])
+    #On récupere la mesure de l'entrée du condenseur (ID 5) avec la fonction QueryResquest  et la met dans une cellule de la table
     row6 = html.Tr([html.Td("Sortie du condenseur (T4)"), html.Td(
         "4"), html.Td(QueryRequest(cursor, 6)), html.Td("°C")])
+    #On récupere la mesure de la sortie du compresseur (ID 6) avec la fonction QueryResquest  et la met dans une cellule de la table
     row7 = html.Tr([html.Td("Entrée du detenteur (T5)"), html.Td(
         "5"), html.Td(QueryRequest(cursor, 7)), html.Td("°C")])
+    #On récupere la mesure de l'entrée du detenteur (ID 7) avec la fonction QueryResquest  et la met dans une cellule de la table
     row9 = html.Tr([html.Td("Sortie d'évaporateur (T7)"), html.Td(
         "7"), html.Td(QueryRequest(cursor, 9)), html.Td("°C")])
+    #On récupere la mesure de la sortie d'évaporateur (ID 9) avec la fonction QueryResquest  et la met dans une cellule de la table
     row10 = html.Tr([html.Td("Bac d'eau (T8)"), html.Td(
         "8"), html.Td(QueryRequest(cursor, 10)), html.Td("°C")])
+    #On récupere la mesure du bac d'eau (ID 10) avec la fonction QueryResquest  et la met dans une cellule de la table
     #on fusionne l'entête du tableau et les lignes du tableau
     table_body = [html.Tbody(
         [row1, row2, row3, row4, row5, row6, row7, row8, row9, row10])]
