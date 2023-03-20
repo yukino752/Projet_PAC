@@ -5,15 +5,19 @@ import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
 
+#Utilisation Bootstrap stylesheets pour customiser le site
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+#Nom de page WEB
 app.title = "PAC_Dashboard"
 
+#On se connecte à la base de données
 try:
+    # les informations nécessaires pour se connecter à la base de données
     conn = mysql.connector.connect(
-        host="host_name",
-        user="username",
-        password="password",
-        database="database_name"
+        host="localhost",
+        user="root",
+        password="",
+        database="test"
     )
     print("Connection established")
 except mysql.connector.Error as err:
@@ -25,54 +29,62 @@ except mysql.connector.Error as err:
         print(err)
 else:
     cursor = conn.cursor()
+    #Une instance de la classe cursor qui permet au code Python d'exécuter des commandes PostgreSQL dans une session de base de données.
 
-
+"""
+fonction QueryRequest retourne une seule mesure d'un des capteurs sous forme d'un tuple.
+les arguments sont une instance de la classe cursor et ID correspond à ID du capteur dans la base de données
+"""
 def QueryRequest(cursor, ID):
+    #requete SQL pour récuperer une mesure dans la base données
     cursor.execute(
         "SELECT m.valeur FROM  mesure m LEFT JOIN capteur c ON m.fk_id_capteur = c.id where m.fk_id_capteur = " +
         str(ID) +
         " ORDER BY m.id DESC LIMIT 1;")
+    #Cette méthode récupère la ligne suivante d'un ensemble de résultats de requête et renvoie une séquence unique.Par défaut, le tuple retourné est constitué de données renvoyées par le serveur MySQL, converties en objets Python.
     res = cursor.fetchone()
     return res
 
 
-def TupleToInt(QueryRequest):
+#Cette fonction permet de récuperer la donnée du tuple qu'on a besoin pour la convertir en float et la retourner
+def TupleToFloat(QueryRequest):
     res = QueryRequest
     res = float(res[0])
     return res
 
-
+#On position les mesures sur le schéma de PAC
 def ValueSchema():
     values = [
-        html.P(str(TupleToInt(QueryRequest(cursor, 1))) + "bar",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 1))) + "bar",
                style={"z-index": "2", "position": "absolute", "right": "400px", "top": "363px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 2))) + "bar",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 2))) + "bar",
                style={"z-index": "2", "position": "absolute", "right": "463px", "top": "363px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 3))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 3))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "460px", "top": "249px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 4))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 4))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "403px", "top": "220px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 5))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 5))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "130px", "top": "130px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 6))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 6))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "275px", "top": "140px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 7))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 7))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "397px", "top": "530px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 8))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 8))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "475px", "top": "530px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 9))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 9))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "560px", "top": "313px"}),
-        html.P(str(TupleToInt(QueryRequest(cursor, 10))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(cursor, 10))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "112px", "top": "470px"}),
     ]
 
     return values
 
-
+#on génére le tableau de mesures
 def generateTable():
+    #création de l'entête du tableau
     table_header = [html.Thead(html.Tr([html.Th("Désignation"), html.Th(
         "Point de mesures"), html.Th("Valeur"), html.Th("Unité")]))]
-
+    #le contenu des lignes
     row8 = html.Tr([html.Td("Sortie du detenteur (T6)"), html.Td(
         "6"), html.Td(QueryRequest(cursor, 8)), html.Td("°C")])
     row1 = html.Tr([html.Td("Haute Pression (HP)"), html.Td(
@@ -93,7 +105,7 @@ def generateTable():
         "7"), html.Td(QueryRequest(cursor, 9)), html.Td("°C")])
     row10 = html.Tr([html.Td("Bac d'eau (T8)"), html.Td(
         "8"), html.Td(QueryRequest(cursor, 10)), html.Td("°C")])
-
+    #on fusionne l'entête du tableau et les lignes du tableau
     table_body = [html.Tbody(
         [row1, row2, row3, row4, row5, row6, row7, row8, row9, row10])]
     return dbc.Table(
@@ -108,7 +120,7 @@ def generateTable():
             "bottom": "0",
             "top": "0"})
 
-
+#
 body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                                 style={"color": "red",
                                                        "textAlign": "center"}),
@@ -129,10 +141,11 @@ body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                                  style={"color": "blue",
                                                         "font-size": "12px"})])]),
                       ])
+# app.layout détermine la structure d'un tableau de bord et décrit l'aspect de l'application
 app.layout = html.Div([body, dcc.Interval(
     id='interval-component', interval=1 * 10000, n_intervals=0), ])
 
-
+#ce callback rafraichi les données du tableau de mesures
 @app.callback(Output('table-data', 'children'),
               [Input('interval-component', 'n_intervals')])
 def update_table(interval):
@@ -141,9 +154,3 @@ def update_table(interval):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-"""
-engine = create_engine("mysql://pierre:azerty@localhost/test")
-source_connection = engine.connect()
-df = pandas.read_sql("SELECT * FROM inventory", con=engine)
-"""
