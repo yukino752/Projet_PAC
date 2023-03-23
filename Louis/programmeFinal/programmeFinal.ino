@@ -5,7 +5,7 @@
 #define RREF      430.0  //Résistance de référence
 #define RNOMINAL  100.0  //Résistance nominale
 
-
+/*
 //THERMOCOUPLE ENTREE DETENDEUR
 int thermoSO1 = 22;
 int thermoCS1 = 23;
@@ -40,11 +40,25 @@ int thermoSCK6 = 39;
 int thermoSO7 = 40;
 int thermoCS7 = 41;
 int thermoSCK7 = 42;
+*/
+
+enum{
+  thermoSO1 = 22, thermoCS1, thermoSCK1,     //THERMOCOUPLE ENTREE DETENDEUR
+  thermoSO2, thermoCS2, thermoSCK2,          //THERMOCOUPLE SORTIE DETENDEUR
+  thermoSO3, thermoCS3, thermoSCK3,          //THERMOCOUPLE ENTREE COMPRESSEUR
+  thermoSO4, thermoCS4, thermoSCK4,          //THERMOCOUPLE SORTIE COMPRESSEUR
+  thermoSO5, thermoCS5, thermoSCK5,          //THERMOCOUPLE ENTREE CONDENSEUR
+  thermoSO6, thermoCS6, thermoSCK6,          //THERMOCOUPLE SORTIE CONDENSEUR
+  thermoSO7, thermoCS7, thermoSCK7,          //THERMOCOUPLE SORTIE EVAPORATEUR
+  pt100CS = 4, pt100SDI, pt100SDO, pt100CLK  //PT100 EAU
+};
+
 
 
 //CAPTEURS PRESSION
 const int capteurBassePression = A14;
 const int capteurHautePression = A15;
+
 
 //Initialisation des amplificateurs MAX6675 pour les thermocouples
 MAX6675 thermocoupleEntreeDetendeur(thermoSCK1, thermoCS1, thermoSO1);
@@ -56,7 +70,7 @@ MAX6675 thermocoupleSortieCondenseur(thermoSCK6, thermoCS6, thermoSO6);
 MAX6675 thermocoupleSortieEvaporateur(thermoSCK7, thermoCS7, thermoSO7);
 
 //Initialisation des amplificateurs MAX31865 pour la sonde PT100
-Adafruit_MAX31865 max = Adafruit_MAX31865(4, 5, 6, 7);
+Adafruit_MAX31865 max = Adafruit_MAX31865(pt100CS, pt100SDI, pt100SDO, pt100CLK);
 
 
 class temperatureThermocouples
