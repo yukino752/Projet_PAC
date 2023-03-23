@@ -2,7 +2,7 @@ import time
 import serial
 if __name__ == '__main__':
     print('Running. Press CTRL-C to exit.')
-with serial.Serial("/dev/ttyACM0", 9600, timeout=1) as arduino:
+with serial.Serial("COM9", 9600, timeout=1) as arduino:
     time.sleep(0.1) #wait for serial to open
 arduino.open()
 try:
