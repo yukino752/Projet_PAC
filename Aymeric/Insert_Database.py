@@ -1,24 +1,8 @@
-import mysql.connector 
-
-############ Fonction pour la connexion à la base de données ############
-
-"""
-connectDB(): mysql.connector.connect()
-"""
-
-def connectDB (): 
-    db = mysql.connector.connect( 
-        host="localhost", 
-        user="root",
-        database="BDD_PAC" )
-    return db
+import mysql.connector
+from CreateDatabase import connectDB
 
 #########################################################################################################
 ############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur Compresseur ############
-
-"""
-Compresseur(V): mysql.connector.connect()
-"""
 
 def Compresseur(Valeur, id_capteur, id_releve):
     conn = connectDB()
@@ -74,15 +58,6 @@ def Releve():
 #########################################################################################################
 
 """
-TempEntree = 10.2
-TempSortie = 10.1
-TempAvant = 10.6
-TempApres = 18
-HautePression = 18
-BassePression = 9
-Volt1 = 8
-Ampere1 = 6
-
 Valeur = 18
 id_capteur = 4
 id_releve = 2
@@ -92,5 +67,5 @@ Releve()
 
 
 if id_capteur == 4:
-    Compresseur(Valeur, id_capteur, id_releve)
+    Compresseur(None, id_capteur, id_releve)
 """

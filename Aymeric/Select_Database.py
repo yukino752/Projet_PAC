@@ -1,12 +1,5 @@
 import mysql.connector 
-
-############ Connection à la bdd ############
-def connectDB (): 
-    db = mysql.connector.connect( 
-        host="localhost", 
-        user="root",
-        database="BDD_PAC" )
-    return db
+from CreateDatabase import connectDB
 
 #########################################################################################################
 ############ Selection de l'id du capteur qui permettra de remplir la table mesure de la bdd ############
@@ -28,7 +21,7 @@ def Select_id_Capteur(Capteur):
     result = cursor.fetchone() # Fetchone retourne un tuple
     id = result[0] # il faut donc selectionner ce qui nous intéresse dans les tupples ici c'est le numéro de l'id
     conn.commit
-    return id
+    return id # On retourne la valeur de l'id correspondant au capteur, qui sera exploité par l'elève 2
 
 #########################################################################################################
 ############ Selection de la validite pour que la central d'acquisition sache si la valeur est correct ############
@@ -52,21 +45,21 @@ def Select_mode (id_mode):
     conn = connectDB()
     cursor = conn.cursor(buffered=True)
     cursor.execute ('SELECT mode FROM pac WHERE id LIKE \'%' + str(id_mode) + '%\'');
-    result = cursor.fetchone() 
+    result = cursor.fetchone() # Fetchone retourne un tuple
     mode = result[0]
     conn.commit
-    return mode
-
+    return mode # On retourne la valeur du mode choisi qui sera exploité par l'elève 2
+ 
 #########################################################################################################
 
 """
-id_mode = 2
+id_mode = 1
 nom_Donnees = 'temperatureEntreeCompresseur'
 id_capteur = Select_id_Capteur(nom_Donnees)
 validite_min, validite_max = Select_validite(nom_Donnees)
 mode = Select_mode(id_mode)
 
-print(id)
+print(id_capteur)
 print(validite_min)
 print(validite_max)
 print(mode)
