@@ -1,4 +1,4 @@
-#include "max6675.h"
+#include <max6675.h>
 #include <Adafruit_MAX31865_PT100.h>
 
 //Pour sonde PT100
@@ -70,7 +70,7 @@ MAX6675 thermocoupleSortieCondenseur(thermoSCK6, thermoCS6, thermoSO6);
 MAX6675 thermocoupleSortieEvaporateur(thermoSCK7, thermoCS7, thermoSO7);
 
 //Initialisation des amplificateurs MAX31865 pour la sonde PT100
-Adafruit_MAX31865 max = Adafruit_MAX31865(pt100CS, pt100SDI, pt100SDO, pt100CLK);
+MAX31865 pt100 = MAX31865(pt100CS, pt100SDI, pt100SDO, pt100CLK);
 
 
 class temperatureThermocouples
@@ -114,9 +114,8 @@ class temperaturePT100
   public:
 
     float readPT100(){
-      uint16_t rtd = max.readRTD();
       Serial.print("temperatureEau"); 
-      Serial.println(max.temperature(RNOMINAL, RREF));
+      Serial.println(pt100.temperature(RNOMINAL, RREF));
       delay(1000);
    }
 
@@ -130,20 +129,25 @@ class pressionCapteurs
       float rawBassePression = analogRead(capteurBassePression);
       float BassePression = (7.3/818.4)*(rawBassePression-(1023*0.5/5));
       //Serial.println(rawBassePression);
+      Serial.print("bassePression");
       Serial.println(BassePression);
+      delay(1000);
 
       float rawHautePression = analogRead(capteurHautePression);
       float HautePression = (34.5/818.4)*(rawHautePression-(1023*0.5/5));
       //Serial.println(rawHautePression);
+      Serial.print("hautePression");
       Serial.println(HautePression);
+      delay(1000);
    }
 
 };
 
 void setup() {
   Serial.begin(9600);
-  max.begin(MAX31865_2WIRE);
+  pt100.begin(MAX31865_2WIRE);
   delay(500);
+  
 }
 
 temperatureThermocouples T;
@@ -152,13 +156,8 @@ pressionCapteurs P;
 
 void loop() {
   T.readTemperature();
-  P.readPression();
   PT.readPT100();
-
-  delay(500);
+  P.readPression();
+  Serial.flush();
 
 }
-
-
-
-
