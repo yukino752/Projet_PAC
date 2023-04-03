@@ -3,7 +3,7 @@ import serial
 if __name__ == '__main__':
     print('Running. Press CTRL-C to exit.')
 with serial.Serial("COM9", 9600, timeout=1) as arduino:
-    time.sleep(0.1) #wait for serial to open
+    time.sleep(0.1)
 arduino.open()
 try:
     while True:
