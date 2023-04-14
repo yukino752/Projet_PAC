@@ -11,32 +11,36 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "PAC_Dashboard"
 
 #On se connecte à la base de données
-try:
-    # les informations nécessaires pour se connecter à la base de données
-    conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="test"
-    )
-    print("Connection established")
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with the user name or password")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist")
+def connect():
+    try:
+        # les informations nécessaires pour se connecter à la base de données
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="BDD_PAC"
+        )
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with the user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
     else:
-        print(err)
-else:
-    cursor = conn.cursor()
-    #Une instance de la classe cursor qui permet au code Python d'exécuter des commandes PostgreSQL dans une session de base de données.
+            return conn
+        #Une instance de la classe cursor qui permet au code Python d'exécuter des commandes PostgreSQL dans une session de base de données.
+
+
 
 """
 fonction QueryRequest retourne une seule mesure d'un des capteurs sous forme d'un tuple.
 les arguments sont une instance de la classe cursor et ID correspond à ID du capteur dans la base de données
 """
-def QueryRequest(cursor, ID):
+def QueryRequest(ID):
     #requete SQL pour récuperer une mesure dans la base données
+    conn = connect()
+    cursor = conn.cursor()
     cursor.execute(
         "SELECT m.valeur FROM  mesure m LEFT JOIN capteur c ON m.fk_id_capteur = c.id where m.fk_id_capteur = " +
         str(ID) +
@@ -55,25 +59,25 @@ def TupleToFloat(QueryRequest):
 #On position les mesures sur le schéma de PAC
 def ValueSchema():
     values = [
-        html.P(str(TupleToFloat(QueryRequest(cursor, 1))) + "bar",
+        html.P(str(TupleToFloat(QueryRequest(1))) + "bar",
                style={"z-index": "2", "position": "absolute", "right": "400px", "top": "363px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 2))) + "bar",
+        html.P(str(TupleToFloat(QueryRequest(2))) + "bar",
                style={"z-index": "2", "position": "absolute", "right": "463px", "top": "363px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 3))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(3))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "460px", "top": "249px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 4))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(4))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "403px", "top": "220px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 5))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(5))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "130px", "top": "130px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 6))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(6))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "275px", "top": "140px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 7))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(7))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "397px", "top": "530px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 8))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(8))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "475px", "top": "530px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 9))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(9))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "560px", "top": "313px"}),
-        html.P(str(TupleToFloat(QueryRequest(cursor, 10))) + "°C",
+        html.P(str(TupleToFloat(QueryRequest(10))) + "°C",
                style={"z-index": "2", "position": "absolute", "right": "112px", "top": "470px"}),
     ]
 
@@ -86,35 +90,25 @@ def generateTable():
         "Point de mesures"), html.Th("Valeur"), html.Th("Unité")]))]
     #le contenu des lignes
     row8 = html.Tr([html.Td("Sortie du detenteur (T6)"), html.Td(
-        "6"), html.Td(QueryRequest(cursor, 8)), html.Td("°C")])
-    #On récupere la mesure de la sortie du detenteur (ID 8) avec la fonction QueryResquest et la met dans une cellule de la table
+        "6"), html.Td(QueryRequest(8)), html.Td("°C")])
     row1 = html.Tr([html.Td("Haute Pression (HP)"), html.Td(
-        "1"), html.Td(QueryRequest(cursor, 1)), html.Td("Bar")])
-    #On récupere la mesure de la haute pression (ID 1) avec la fonction QueryResquest et la met dans une cellule de la table
+        "1"), html.Td(QueryRequest(1)), html.Td("Bar")])
     row2 = html.Tr([html.Td("Basse Pression (BP)"), html.Td(
-        "2"), html.Td(QueryRequest(cursor, 2)), html.Td("Bar")])
-    #On récupere la mesure de la basse pression (ID 2) avec la fonction QueryResquest et la met dans une cellule de la table
+        "2"), html.Td(QueryRequest(2)), html.Td("Bar")])
     row3 = html.Tr([html.Td("Entrée du compresseur (T1)"), html.Td(
-        "1"), html.Td(QueryRequest(cursor, 3)), html.Td("°C")])
-    #On récupere la mesure de l'entrée du compresseur (ID 3) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "1"), html.Td(QueryRequest(3)), html.Td("°C")])
     row4 = html.Tr([html.Td("Sortie du compresseur (T2)"), html.Td(
-        "2"), html.Td(QueryRequest(cursor, 4)), html.Td("°C")])
-    #On récupere la mesure de la sortie du compresseur (ID 4) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "2"), html.Td(QueryRequest(4)), html.Td("°C")])
     row5 = html.Tr([html.Td("Entrée du condenseur (T3)"), html.Td(
-        "3"), html.Td(QueryRequest(cursor, 5)), html.Td("°C")])
-    #On récupere la mesure de l'entrée du condenseur (ID 5) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "3"), html.Td(QueryRequest(5)), html.Td("°C")])
     row6 = html.Tr([html.Td("Sortie du condenseur (T4)"), html.Td(
-        "4"), html.Td(QueryRequest(cursor, 6)), html.Td("°C")])
-    #On récupere la mesure de la sortie du compresseur (ID 6) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "4"), html.Td(QueryRequest(6)), html.Td("°C")])
     row7 = html.Tr([html.Td("Entrée du detenteur (T5)"), html.Td(
-        "5"), html.Td(QueryRequest(cursor, 7)), html.Td("°C")])
-    #On récupere la mesure de l'entrée du detenteur (ID 7) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "5"), html.Td(QueryRequest(7)), html.Td("°C")])
     row9 = html.Tr([html.Td("Sortie d'évaporateur (T7)"), html.Td(
-        "7"), html.Td(QueryRequest(cursor, 9)), html.Td("°C")])
-    #On récupere la mesure de la sortie d'évaporateur (ID 9) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "7"), html.Td(QueryRequest(9)), html.Td("°C")])
     row10 = html.Tr([html.Td("Bac d'eau (T8)"), html.Td(
-        "8"), html.Td(QueryRequest(cursor, 10)), html.Td("°C")])
-    #On récupere la mesure du bac d'eau (ID 10) avec la fonction QueryResquest  et la met dans une cellule de la table
+        "8"), html.Td(QueryRequest(10)), html.Td("°C")])
     #on fusionne l'entête du tableau et les lignes du tableau
     table_body = [html.Tbody(
         [row1, row2, row3, row4, row5, row6, row7, row8, row9, row10])]
@@ -130,7 +124,8 @@ def generateTable():
             "bottom": "0",
             "top": "0"})
 
-#
+
+
 body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                                 style={"color": "red",
                                                        "textAlign": "center"}),
@@ -150,6 +145,10 @@ body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                         html.Div(ValueSchema(),
                                                  style={"color": "blue",
                                                         "font-size": "12px"})])]),
+                      dbc.Row([dbc.Col([html.Img(src=app.get_asset_url('diagramme.png'),)],
+                                       ),
+                              ]),
+
                       ])
 # app.layout détermine la structure d'un tableau de bord et décrit l'aspect de l'application
 app.layout = html.Div([body, dcc.Interval(
@@ -164,3 +163,5 @@ def update_table(interval):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
