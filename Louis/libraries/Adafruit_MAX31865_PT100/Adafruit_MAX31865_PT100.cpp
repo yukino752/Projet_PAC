@@ -28,7 +28,7 @@ static SPISettings max31865_spisettings = SPISettings(500000, MSBFIRST, SPI_MODE
 
 
 // Software (bitbang) SPI
-Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk) {
+MAX31865::MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_miso, int8_t spi_clk) {
   _sclk = spi_clk;
   _cs = spi_cs;
   _miso = spi_miso;
@@ -37,12 +37,12 @@ Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs, int8_t spi_mosi, int8_t spi_
 }
 
 // Hardware SPI init
-Adafruit_MAX31865::Adafruit_MAX31865(int8_t spi_cs) {
+MAX31865::MAX31865(int8_t spi_cs) {
   _cs = spi_cs;
   _sclk = _miso = _mosi = -1;
 }
 
-boolean Adafruit_MAX31865::begin(max31865_numwires_t wires) {
+boolean MAX31865::begin(max31865_numwires_t wires) {
   pinMode(_cs, OUTPUT);
   digitalWrite(_cs, HIGH);
 
@@ -71,18 +71,18 @@ boolean Adafruit_MAX31865::begin(max31865_numwires_t wires) {
 }
 
 
-uint8_t Adafruit_MAX31865::readFault(void) {
+uint8_t MAX31865::readFault(void) {
   return readRegister8(MAX31856_FAULTSTAT_REG);
 }
 
-void Adafruit_MAX31865::clearFault(void) {
+void MAX31865::clearFault(void) {
   uint8_t t = readRegister8(MAX31856_CONFIG_REG);
   t &= ~0x2C;
   t |= MAX31856_CONFIG_FAULTSTAT;
   writeRegister8(MAX31856_CONFIG_REG, t);
 }
 
-void Adafruit_MAX31865::enableBias(boolean b) {
+void MAX31865::enableBias(boolean b) {
   uint8_t t = readRegister8(MAX31856_CONFIG_REG);
   if (b) {
     t |= MAX31856_CONFIG_BIAS;       // enable bias
@@ -92,7 +92,7 @@ void Adafruit_MAX31865::enableBias(boolean b) {
   writeRegister8(MAX31856_CONFIG_REG, t);
 }
 
-void Adafruit_MAX31865::autoConvert(boolean b) {
+void MAX31865::autoConvert(boolean b) {
   uint8_t t = readRegister8(MAX31856_CONFIG_REG);
   if (b) {
     t |= MAX31856_CONFIG_MODEAUTO;       // enable autoconvert
@@ -102,7 +102,7 @@ void Adafruit_MAX31865::autoConvert(boolean b) {
   writeRegister8(MAX31856_CONFIG_REG, t);
 }
 
-void Adafruit_MAX31865::setWires(max31865_numwires_t wires ) {
+void MAX31865::setWires(max31865_numwires_t wires ) {
   uint8_t t = readRegister8(MAX31856_CONFIG_REG);
   if (wires == MAX31865_3WIRE) {
     t |= MAX31856_CONFIG_3WIRE;
@@ -113,7 +113,7 @@ void Adafruit_MAX31865::setWires(max31865_numwires_t wires ) {
   writeRegister8(MAX31856_CONFIG_REG, t);
 }
 
-float  Adafruit_MAX31865::temperature(float RTDnominal, float refResistor) {
+float  MAX31865::temperature(float RTDnominal, float refResistor) {
   // http://www.analog.com/media/en/technical-documentation/application-notes/AN709_0.pdf
 
   float Z1, Z2, Z3, Z4, Rt, temp;
@@ -154,7 +154,7 @@ float  Adafruit_MAX31865::temperature(float RTDnominal, float refResistor) {
   return temp;
 }
 
-uint16_t Adafruit_MAX31865::readRTD (void) {
+uint16_t MAX31865::readRTD (void) {
   clearFault();
   enableBias(true);
   delay(10);
@@ -172,7 +172,7 @@ uint16_t Adafruit_MAX31865::readRTD (void) {
 }
 
 //Nouvelle fonction
-float  Adafruit_MAX31865::lecture_resistance() {
+float  MAX31865::lecture_resistance() {
 
   float Rt;
 
@@ -185,14 +185,14 @@ float  Adafruit_MAX31865::lecture_resistance() {
 
 /**********************************************/
 
-uint8_t Adafruit_MAX31865::readRegister8(uint8_t addr) {
+uint8_t MAX31865::readRegister8(uint8_t addr) {
   uint8_t ret = 0;
   readRegisterN(addr, &ret, 1);
 
   return ret;
 }
 
-uint16_t Adafruit_MAX31865::readRegister16(uint8_t addr) {
+uint16_t MAX31865::readRegister16(uint8_t addr) {
   uint8_t buffer[2] = {0, 0};
   readRegisterN(addr, buffer, 2);
 
@@ -204,7 +204,7 @@ uint16_t Adafruit_MAX31865::readRegister16(uint8_t addr) {
 }
 
 
-void Adafruit_MAX31865::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n) {
+void MAX31865::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n) {
   addr &= 0x7F; // make sure top bit is not set
 
   if (_sclk == -1)
@@ -231,7 +231,7 @@ void Adafruit_MAX31865::readRegisterN(uint8_t addr, uint8_t buffer[], uint8_t n)
 }
 
 
-void Adafruit_MAX31865::writeRegister8(uint8_t addr, uint8_t data) {
+void MAX31865::writeRegister8(uint8_t addr, uint8_t data) {
   if (_sclk == -1)
     SPI.beginTransaction(max31865_spisettings);
   else 
@@ -252,7 +252,7 @@ void Adafruit_MAX31865::writeRegister8(uint8_t addr, uint8_t data) {
 
 
 
-uint8_t Adafruit_MAX31865::spixfer(uint8_t x) {
+uint8_t MAX31865::spixfer(uint8_t x) {
   if (_sclk == -1)
     return SPI.transfer(x);
 
