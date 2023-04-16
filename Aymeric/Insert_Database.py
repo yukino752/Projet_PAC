@@ -56,7 +56,19 @@ def Releve():
     conn.commit()
 
 #########################################################################################################
+############ Trigger ############
 
+#def Trigger():
+#    conn = connectDB()
+#    cursor = conn.cursor()
+#    cursor.execute ("""
+#                    CREATE TRIGGER test_trigger 
+#                    ON Mesure AFTER INSERT
+#                    AS BEGIN
+#                    print ("réussi") ; """)
+#    conn.commit()
+
+#Trigger()
 """
 Valeur = 18
 id_capteur = 4
