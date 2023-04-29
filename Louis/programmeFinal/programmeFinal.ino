@@ -1,3 +1,4 @@
+// Inclusion des bibliothèques pour les capteurs MAX6675 et PT100
 #include <max6675.h>
 #include <Adafruit_MAX31865_PT100.h>
 
@@ -42,6 +43,8 @@ int thermoCS7 = 41;
 int thermoSCK7 = 42;
 */
 
+
+// Assignation des broches pour les thermocouples et la sonde PT100
 enum{
   thermoSO1 = 22, thermoCS1, thermoSCK1,     //THERMOCOUPLE ENTREE DETENDEUR
   thermoSO2, thermoCS2, thermoSCK2,          //THERMOCOUPLE SORTIE DETENDEUR
@@ -72,48 +75,37 @@ MAX6675 thermocoupleSortieEvaporateur(thermoSCK7, thermoCS7, thermoSO7);
 //Initialisation des amplificateurs MAX31865 pour la sonde PT100
 MAX31865 pt100 = MAX31865(pt100CS, pt100SDI, pt100SDO, pt100CLK);
 
-
+// Définition de la classe pour les températures des thermocouples
 class temperatureThermocouples
 {
   public:
-
     float readTemperature(){
-      Serial.print("temperatureEntreeDetendeur");
-      Serial.println(thermocoupleEntreeDetendeur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureSortieDetendeur"); 
-      Serial.println(thermocoupleSortieDetendeur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureEntreeCompresseur"); 
-      Serial.println(thermocoupleEntreeCompresseur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureSortieCompresseur"); 
-      Serial.println(thermocoupleSortieCompresseur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureEntreeCondenseur"); 
-      Serial.println(thermocoupleEntreeCondenseur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureSortieCondenseur"); 
-      Serial.println(thermocoupleSortieCondenseur.readCelsius());
-      delay(1000);
-
-      Serial.print("temperatureSortieEvaporateur"); 
-      Serial.println(thermocoupleSortieEvaporateur.readCelsius());
-      delay(1000);
-   }
-
+      const int numThermocouples = 7;
+      int thermoSO[] = {thermoSO1, thermoSO2, thermoSO3, thermoSO4, thermoSO5, thermoSO6, thermoSO7};
+      int thermoCS[] = {thermoCS1, thermoCS2, thermoCS3, thermoCS4, thermoCS5, thermoCS6, thermoCS7};
+      int thermoSCK[] = {thermoSCK1, thermoSCK2, thermoSCK3, thermoSCK4, thermoSCK5, thermoSCK6, thermoSCK7};
+      MAX6675 *thermocouples[] = {&thermocoupleEntreeDetendeur, &thermocoupleSortieDetendeur, 
+                                  &thermocoupleEntreeCompresseur, &thermocoupleSortieCompresseur, 
+                                  &thermocoupleEntreeCondenseur, &thermocoupleSortieCondenseur, 
+                                  &thermocoupleSortieEvaporateur};
+      const char *thermocoupleNames[] = {"temperatureEntreeDetendeur", "temperatureSortieDetendeur", 
+                                         "temperatureEntreeCompresseur", "temperatureSortieCompresseur",
+                                         "temperatureEntreeCondenseur", "temperatureSortieCondenseur", 
+                                         "temperatureSortieEvaporateur"};
+      for (int i = 0; i < numThermocouples; i++) {
+        Serial.print(thermocoupleNames[i]);
+        Serial.println(thermocouples[i]->readCelsius());
+        delay(1000);
+      }
+    }
 };
 
+// Définition de la classe pour les température de la sonde PT100
 class temperaturePT100
 {
   public:
-
-    float readPT100(){
+    // Lecture de la température pour la sonde PT100
+    float readTemperaturePT100(){
       Serial.print("temperatureEau"); 
       Serial.println(pt100.temperature(RNOMINAL, RREF));
       delay(1000);
@@ -121,10 +113,11 @@ class temperaturePT100
 
 };
 
+// Définition de la classe pour les basses et hautes pressions des capteurs de pressions
 class pressionCapteurs
 {
   public :
-
+    // Lecture et conversion des valeurs brutes de capteurs de pressions 
     float readPression(){
       float rawBassePression = analogRead(capteurBassePression);
       float BassePression = (7.3/818.4)*(rawBassePression-(1023*0.5/5));
@@ -145,19 +138,27 @@ class pressionCapteurs
 
 void setup() {
   Serial.begin(9600);
+  //Initialisation de l'amplificateur MAX31865 pour la sonde PT100 (2 fils)
   pt100.begin(MAX31865_2WIRE);
   delay(500);
   
 }
 
-temperatureThermocouples T;
-temperaturePT100 PT;
-pressionCapteurs P;
+temperatureThermocouples thermocouples;
+temperaturePT100 temperatureEau;
+pressionCapteurs pression;
 
 void loop() {
-  T.readTemperature();
-  PT.readPT100();
-  P.readPression();
-  Serial.flush();
+  thermocouples.readTemperaturePT100();
+  temperatureEau.readPT100();
+  pression.readPression();
+  
+  float temps = millis();
+  Serial.print("tempsSecondes");
+  Serial.println(temps/1000, 0);
+  delay(1000);
+  Serial.print("tempsMinutes");
+  Serial.println(temps/1000/60);
+  delay(1000);
 
 }
