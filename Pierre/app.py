@@ -4,58 +4,18 @@ from dash import html, Dash, dcc, Input, Output
 import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
+from DB import QueryRequest ,TupleToFloat
+from enthalpique import DiagrammeEnthalpie
 
 #Utilisation Bootstrap stylesheets pour customiser le site
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 #Nom de page WEB
 app.title = "PAC_Dashboard"
 
-#On se connecte à la base de données
-def connect():
-    try:
-        # les informations nécessaires pour se connecter à la base de données
-        conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="BDD_PAC"
-        )
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with the user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
-    else:
-            return conn
-        #Une instance de la classe cursor qui permet au code Python d'exécuter des commandes PostgreSQL dans une session de base de données.
 
 
-
-"""
-fonction QueryRequest retourne une seule mesure d'un des capteurs sous forme d'un tuple.
-les arguments sont une instance de la classe cursor et ID correspond à ID du capteur dans la base de données
-"""
-def QueryRequest(ID):
-    #requete SQL pour récuperer une mesure dans la base données
-    conn = connect()
-    cursor = conn.cursor()
-    cursor.execute(
-        "SELECT m.valeur FROM  mesure m LEFT JOIN capteur c ON m.fk_id_capteur = c.id where m.fk_id_capteur = " +
-        str(ID) +
-        " ORDER BY m.id DESC LIMIT 1;")
-    #Cette méthode récupère la ligne suivante d'un ensemble de résultats de requête et renvoie une séquence unique.Par défaut, le tuple retourné est constitué de données renvoyées par le serveur MySQL, converties en objets Python.
-    res = cursor.fetchone()
-    return res
-
-
-#Cette fonction permet de récuperer la donnée du tuple qu'on a besoin pour la convertir en float et la retourner
-def TupleToFloat(QueryRequest):
-    res = QueryRequest
-    res = float(res[0])
-    return res
-
+DIA = DiagrammeEnthalpie()
+DIA.creer_diagramme()
 #On position les mesures sur le schéma de PAC
 def ValueSchema():
     values = [
@@ -165,3 +125,12 @@ if __name__ == '__main__':
     app.run_server(debug=True)
 
 
+"""
+
+engine = create_engine("mysql://pierre:azerty@localhost/test")
+
+source_connection = engine.connect()
+
+df = pandas.read_sql("SELECT * FROM inventory", con=engine)
+PASSTOKEN = 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
+"""
