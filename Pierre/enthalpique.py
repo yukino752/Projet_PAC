@@ -6,7 +6,8 @@ from CoolProp.Plots import SimpleCompressionCycle
 from CoolProp.CoolProp import PropsSI
 import matplotlib.ticker as tck
 import mysql.connector
-from DB import connectDB ,QueryRequest, TupleToFloat
+from DB import connectDB, QueryRequest, TupleToFloat
+
 
 class DiagrammeEnthalpie:
     def __init__(self):
@@ -29,15 +30,15 @@ class DiagrammeEnthalpie:
         self.UNITS = {'T': 'K', 'Q': '', 'S': 'kJ/K/kg', 'V': 'm$^3$/kg'}
         self.LABEL = {'T': 'T', 'Q': 'x', 'S': 's', 'V': 'v'}
         self.COLOR_MAP = {'T': 'Darkred',
-                     'P': 'DarkCyan',
-                     'H': 'DarkGreen',
-                     'V': 'DarkBlue',
-                     'S': 'DarkOrange',
-                     'Q': 'black'}
+                          'P': 'DarkCyan',
+                          'H': 'DarkGreen',
+                          'V': 'DarkBlue',
+                          'S': 'DarkOrange',
+                          'Q': 'black'}
         self.LINE_STYLE = {'T': '-.',
-              'V': '--',
-              'S': ':',
-              'Q': '-'}
+                           'V': '--',
+                           'S': ':',
+                           'Q': '-'}
         self.p_min = 0.0
         self.p_max = 0.0
         self.h_min = 0.0
@@ -71,19 +72,31 @@ class DiagrammeEnthalpie:
         return -273.15
 
     def get_p_min(self):
-        self.p_min = (CP.PropsSI(self.FLUIDE, 'ptriple') + 1) / self.CONVERSION[self.unitP]
+        self.p_min = (CP.PropsSI(self.FLUIDE, 'ptriple') + 1) / \
+            self.CONVERSION[self.unitP]
         return self.p_min
 
     def get_p_max(self):
-        self.p_max = (1.5 * CP.PropsSI(self.FLUIDE, 'pcrit')) / self.CONVERSION[self.unitP]
+        self.p_max = (1.5 * CP.PropsSI(self.FLUIDE, 'pcrit')) / \
+            self.CONVERSION[self.unitP]
         return self.p_max
 
     def get_h_min(self):
-        self.h_min = 0.9 * CP.PropsSI('H', 'P', self.get_p_min() * self.CONVERSION[self.unitP], 'Q', 0,  self.FLUIDE) / self.CONVERSION[self.unitH]
+        self.h_min = 0.9 * CP.PropsSI('H',
+                                      'P',
+                                      self.get_p_min() * self.CONVERSION[self.unitP],
+                                      'Q',
+                                      0,
+                                      self.FLUIDE) / self.CONVERSION[self.unitH]
         return self.h_min
 
     def get_h_max(self):
-        self.h_max = 1.5 * CP.PropsSI('H', 'P', self.get_p_min() * self.CONVERSION[self.unitP], 'Q', 1, self.FLUIDE) / self.CONVERSION[self.unitH]
+        self.h_max = 1.5 * CP.PropsSI('H',
+                                      'P',
+                                      self.get_p_min() * self.CONVERSION[self.unitP],
+                                      'Q',
+                                      1,
+                                      self.FLUIDE) / self.CONVERSION[self.unitH]
         return self.h_max
 
     def get_t_triple(self):
@@ -95,11 +108,15 @@ class DiagrammeEnthalpie:
         return self.t_crit
 
     def get_t_min(self):
-        self.t_min = (self.get_kelvin() + int((self.get_celsius()+self.get_t_triple()) / 10) * 10 + 10) + 20
+        self.t_min = (self.get_kelvin(
+        ) + int((self.get_celsius() + self.get_t_triple()) / 10) * 10 + 10) + 20
         return self.t_min
 
     def get_val_t(self):
-        self.val_t = np.arange(self.get_t_min(), 1.5 * self.get_t_crit(), self.dT)
+        self.val_t = np.arange(
+            self.get_t_min(),
+            1.5 * self.get_t_crit(),
+            self.dT)
         return self.val_t
 
     def get_t_to_show(self):
@@ -107,15 +124,20 @@ class DiagrammeEnthalpie:
         return self.t_to_show
 
     def get_s_triple_x0(self):
-        self.s_triple_x0 = CP.PropsSI('S', 'Q', 0, 'T', self.get_t_triple(), self.FLUIDE)
+        self.s_triple_x0 = CP.PropsSI(
+            'S', 'Q', 0, 'T', self.get_t_triple(), self.FLUIDE)
         return self.s_triple_x0
 
     def get_s_triple_x1(self):
-        self.s_triple_x1 = CP.PropsSI('S', 'Q', 1, 'T', self.get_t_triple(), self.FLUIDE)
+        self.s_triple_x1 = CP.PropsSI(
+            'S', 'Q', 1, 'T', self.get_t_triple(), self.FLUIDE)
         return self.s_triple_x1
 
     def get_val_s(self):
-        self.val_s = np.arange(self.get_s_triple_x0(), self.get_s_triple_x1() * 1.2, 100)
+        self.val_s = np.arange(
+            self.get_s_triple_x0(),
+            self.get_s_triple_x1() * 1.2,
+            100)
         return self.val_s
 
     def get_s_to_show(self):
@@ -131,7 +153,8 @@ class DiagrammeEnthalpie:
         return self.exp_min
 
     def get_v_triple_x1(self):
-        self.v_triple_x1 = 1 / CP.PropsSI('D', 'Q', 1, 'T', self.get_t_triple(), self.FLUIDE)
+        self.v_triple_x1 = 1 / \
+            CP.PropsSI('D', 'Q', 1, 'T', self.get_t_triple(), self.FLUIDE)
         return self.v_triple_x1
 
     def get_exp_max(self):
@@ -139,16 +162,26 @@ class DiagrammeEnthalpie:
         return self.exp_max
 
     def get_val_v(self):
-        self.val_v = [a * 10 ** b for a in [1, 2, 5] for b in range(self.get_exp_min(), self.get_exp_max() + 1)]
+        self.val_v = [a * 10 ** b for a in [1, 2, 5]
+                      for b in range(self.get_exp_min(), self.get_exp_max() + 1)]
         return self.val_v
 
-    def fait_isolignes(self, type_, valeurs, position=None, nb_points=1000, to_show=None, round_nb=0):
+    def fait_isolignes(
+            self,
+            type_,
+            valeurs,
+            position=None,
+            nb_points=1000,
+            to_show=None,
+            round_nb=0):
         """ S'occupe du calcul et du tracé des isolignes. """
 
         if not to_show:  # Valeurs par défauts:
             to_show = list(range(len(valeurs)))  # toutes !
-        p_min, p_max = [p * self.CONVERSION[self.unitP] for p in plt.ylim()]  # On regarde les
-        h_min, h_max = [H * self.CONVERSION[self.unitH] for H in plt.xlim()]  # limites du graphique
+        p_min, p_max = [p * self.CONVERSION[self.unitP]
+                        for p in plt.ylim()]  # On regarde les
+        h_min, h_max = [H * self.CONVERSION[self.unitH]
+                        for H in plt.xlim()]  # limites du graphique
         # Par défaut, l'échantillonnage en P est linéaire
         val_p0 = np.linspace(p_min, p_max, nb_points)
         # Sinon, on se met en échelle log.
@@ -164,10 +197,20 @@ class DiagrammeEnthalpie:
         # Pour chacune des valeurs demandées,
         for val, i in zip(valeurs, range(len(valeurs))):
             if type_ == 'V':  # Cas particulier des volumes massiques: échantillonnage
-                val_p = CP.PropsSI('P', 'T', val_t, 'D', 1 / val, self.FLUIDE)  # en température
-                val_h = CP.PropsSI('H', 'T', val_t, 'D', 1 / val, self.FLUIDE)  # et non en P
+                val_p = CP.PropsSI(
+                    'P',
+                    'T',
+                    val_t,
+                    'D',
+                    1 / val,
+                    self.FLUIDE)  # en température
+                val_h = CP.PropsSI(
+                    'H', 'T', val_t, 'D', 1 / val, self.FLUIDE)  # et non en P
             elif type_ == 'Q':
-                val_t = np.linspace(self.get_t_triple(), self.get_t_crit(), nb_points)
+                val_t = np.linspace(
+                    self.get_t_triple(),
+                    self.get_t_crit(),
+                    nb_points)
                 val_p = CP.PropsSI('P', 'T', val_t, 'Q', val, self.FLUIDE)
                 val_h = CP.PropsSI('H', 'T', val_t, 'Q', val, self.FLUIDE)
             else:  # Sinon, on utilise l'éventail des pression
@@ -179,16 +222,20 @@ class DiagrammeEnthalpie:
             if type_ == 'S':
                 val /= 1e3  # Pour mettre en kJ/K/kg
             if type_ == 'T':
-                val = self.get_celsius()+val
+                val = self.get_celsius() + val
             if round_nb > 0:
                 val = str(round(val, round_nb))  # Pour faire joli
 
             else:
                 val = str(int(round(val)))  # là aussi...
-            label = '${}={}$ {}'.format(self.LABEL[type_], val, self.UNITS[type_])
+            label = '${}={}$ {}'.format(
+                self.LABEL[type_], val, self.UNITS[type_])
             # Affichage courbe
-            plt.plot(val_h, val_p,
-                     color=self.COLOR_MAP[type_], linestyle=self.LINE_STYLE[type_])
+            plt.plot(
+                val_h,
+                val_p,
+                color=self.COLOR_MAP[type_],
+                linestyle=self.LINE_STYLE[type_])
 
             # Le programme proprement dit commence ici.
     def CycleFrigorifique(self):
@@ -196,16 +243,25 @@ class DiagrammeEnthalpie:
         self.HP = QueryRequest(1)
         self.HP = TupleToFloat(self.HP)
 
-        # Cette méthode récupère la ligne suivante d'un ensemble de résultats de requête et renvoie une séquence unique.Par défaut, le tuple retourné est constitué de données renvoyées par le serveur MySQL, converties en objets Python.
+        # Cette méthode récupère la ligne suivante d'un ensemble de résultats
+        # de requête et renvoie une séquence unique.Par défaut, le tuple
+        # retourné est constitué de données renvoyées par le serveur MySQL,
+        # converties en objets Python.
         self.BP = QueryRequest(2)
         self.BP = TupleToFloat(self.BP)
 
-        self.DetenteurE = PropsSI('H', 'P', self.HP * 100000, 'Q', 0, self.FLUIDE) * 0.001
-        self.DetenteurS = PropsSI('H', 'P', self.BP * 100000, 'Q', 0, self.FLUIDE) * 0.001
-        self.CompresseurE = PropsSI('H', 'P', self.BP * 100000, 'Q', 1, self.FLUIDE) * 0.001
-        self.CompresseurS = PropsSI('H', 'P', self.HP * 100000, 'Q', 1, self.FLUIDE) * 0.001
+        self.DetenteurE = PropsSI(
+            'H',
+            'P',
+            self.HP * 100000,
+            'Q',
+            0,
+            self.FLUIDE) * 0.001
 
-
+        self.CompresseurE = PropsSI(
+            'H', 'P', self.BP * 100000, 'Q', 1, self.FLUIDE) * 0.001
+        self.CompresseurS = PropsSI(
+            'H', 'P', self.HP * 100000, 'Q', 1, self.FLUIDE) * 0.001
 
     def creer_diagramme(self):
         self.CycleFrigorifique()
@@ -219,35 +275,59 @@ class DiagrammeEnthalpie:
 
         # Tracé de la courbe de saturation
         self.fait_isolignes('Q', [0, 1], position=0, to_show=[''])
-        # Ici, on fait toutes les autres isolignes (le boulot a été fait plus haut)
+        # Ici, on fait toutes les autres isolignes (le boulot a été fait plus
+        # haut)
 
         if self.ISO_T:
-            self.fait_isolignes('T', self.get_val_t(), position=0.8, to_show=self.get_t_to_show())
+            self.fait_isolignes(
+                'T',
+                self.get_val_t(),
+                position=0.8,
+                to_show=self.get_t_to_show())
         if self.ISO_S:
-            self.fait_isolignes('S', self.get_val_s(), position=0.3, to_show=self.get_s_to_show(), round_nb=3)
+            self.fait_isolignes(
+                'S',
+                self.get_val_s(),
+                position=0.3,
+                to_show=self.get_s_to_show(),
+                round_nb=3)
         if self.ISO_V:
-            self.fait_isolignes('V', self.get_val_v(), position=0.25, to_show=self.v_to_show, round_nb=3)
+            self.fait_isolignes(
+                'V',
+                self.get_val_v(),
+                position=0.25,
+                to_show=self.v_to_show,
+                round_nb=3)
         if self.ISO_X:
-            self.fait_isolignes('Q', self.val_x, position=0.1, to_show=self.x_to_show, round_nb=2)
+            self.fait_isolignes(
+                'Q',
+                self.val_x,
+                position=0.1,
+                to_show=self.x_to_show,
+                round_nb=2)
 
-        plt.plot([self.DetenteurE, self.CompresseurS, self.CompresseurE, self.DetenteurS, self.DetenteurE], [self.HP, self.HP, self.BP, self.BP, self.HP], "-rs")
+        plt.plot([self.DetenteurE,
+                  self.CompresseurS,
+                  self.CompresseurE,
+                  self.DetenteurE,
+                  self.DetenteurE],
+                 [self.HP,
+                  self.HP,
+                  self.BP,
+                  self.BP,
+                  self.HP],
+                 "-rs")
         plt.plot([0, self.DetenteurE], [0, self.HP], "--c")
-        plt.plot([0, self.DetenteurS], [0, self.BP], "--c")
         plt.plot([0, self.CompresseurS], [0, self.HP], "--c")
         plt.plot([0, self.CompresseurE], [0, self.BP], "--c")
         plt.plot([0, self.DetenteurE], [self.HP, self.HP], "--c")
-        plt.plot([0, self.DetenteurS], [self.BP, self.BP], "--c")
 
         plt.xlabel('Enthalpie massique $h$ (en {}/kg)'.format(self.unitH))
         plt.ylabel('Pression P (en {})'.format(self.unitP))
-        plt.title('Diagramme Pression/Enthalpie pour le fluide {}'.format(self.FLUIDE))
+        plt.title(
+            'Diagramme Pression/Enthalpie pour le fluide {}'.format(self.FLUIDE))
 
         plt.grid(which='both')  # Rajout de la grille
-        plt.savefig(r"C:\Dossier_Perso\Etude Supérieur\Lycee\Projet_PAC\Aymeric\assets\diagramme".format(self.FLUIDE))
-
-
-
-
-
-
-
+        plt.savefig(
+            r"/tmp/diag.png".format(
+                self.FLUIDE))
