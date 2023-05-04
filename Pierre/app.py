@@ -4,19 +4,20 @@ from dash import html, Dash, dcc, Input, Output
 import mysql.connector
 import pandas as pd
 from mysql.connector import errorcode
-from DB import QueryRequest ,TupleToFloat
+from DB import QueryRequest, TupleToFloat
 from enthalpique import DiagrammeEnthalpie
 
-#Utilisation Bootstrap stylesheets pour customiser le site
+# Utilisation Bootstrap stylesheets pour customiser le site
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
-#Nom de page WEB
+# Nom de page WEB
 app.title = "PAC_Dashboard"
-
 
 
 DIA = DiagrammeEnthalpie()
 DIA.creer_diagramme()
-#On position les mesures sur le schéma de PAC
+# On positionne les mesures sur le schéma de PAC
+
+
 def ValueSchema():
     values = [
         html.P(str(TupleToFloat(QueryRequest(1))) + "bar",
@@ -43,12 +44,14 @@ def ValueSchema():
 
     return values
 
-#on génére le tableau de mesures
+# on génére le tableau de mesures
+
+
 def generateTable():
-    #création de l'entête du tableau
+    # création de l'entête du tableau
     table_header = [html.Thead(html.Tr([html.Th("Désignation"), html.Th(
         "Point de mesures"), html.Th("Valeur"), html.Th("Unité")]))]
-    #le contenu des lignes
+    # le contenu des lignes
     row8 = html.Tr([html.Td("Sortie du detenteur (T6)"), html.Td(
         "6"), html.Td(QueryRequest(8)), html.Td("°C")])
     row1 = html.Tr([html.Td("Haute Pression (HP)"), html.Td(
@@ -69,7 +72,7 @@ def generateTable():
         "7"), html.Td(QueryRequest(9)), html.Td("°C")])
     row10 = html.Tr([html.Td("Bac d'eau (T8)"), html.Td(
         "8"), html.Td(QueryRequest(10)), html.Td("°C")])
-    #on fusionne l'entête du tableau et les lignes du tableau
+    # on fusionne l'entête du tableau et les lignes du tableau
     table_body = [html.Tbody(
         [row1, row2, row3, row4, row5, row6, row7, row8, row9, row10])]
     return dbc.Table(
@@ -83,7 +86,6 @@ def generateTable():
             "width": "95%",
             "bottom": "0",
             "top": "0"})
-
 
 
 body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
@@ -107,14 +109,17 @@ body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                                         "font-size": "12px"})])]),
                       dbc.Row([dbc.Col([html.Img(src=app.get_asset_url('diagramme.png'),)],
                                        ),
-                              ]),
+                               ]),
 
                       ])
-# app.layout détermine la structure d'un tableau de bord et décrit l'aspect de l'application
+# app.layout détermine la structure d'un tableau de bord et décrit
+# l'aspect de l'application
 app.layout = html.Div([body, dcc.Interval(
     id='interval-component', interval=1 * 10000, n_intervals=0), ])
 
-#ce callback rafraichi les données du tableau de mesures
+# ce callback rafraichi les données du tableau de mesures
+
+
 @app.callback(Output('table-data', 'children'),
               [Input('interval-component', 'n_intervals')])
 def update_table(interval):
