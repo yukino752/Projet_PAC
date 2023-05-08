@@ -18,31 +18,21 @@ DIA.creer_diagramme()
 # On positionne les mesures sur le schéma de PAC
 
 
-def ValueSchema():
-    values = [
-        html.P(str(TupleToFloat(QueryRequest(1))) + "bar",
-               style={"z-index": "2", "position": "absolute", "right": "400px", "top": "363px"}),
-        html.P(str(TupleToFloat(QueryRequest(2))) + "bar",
-               style={"z-index": "2", "position": "absolute", "right": "463px", "top": "363px"}),
-        html.P(str(TupleToFloat(QueryRequest(3))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "460px", "top": "249px"}),
-        html.P(str(TupleToFloat(QueryRequest(4))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "403px", "top": "220px"}),
-        html.P(str(TupleToFloat(QueryRequest(5))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "130px", "top": "130px"}),
-        html.P(str(TupleToFloat(QueryRequest(6))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "275px", "top": "140px"}),
-        html.P(str(TupleToFloat(QueryRequest(7))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "397px", "top": "530px"}),
-        html.P(str(TupleToFloat(QueryRequest(8))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "475px", "top": "530px"}),
-        html.P(str(TupleToFloat(QueryRequest(9))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "560px", "top": "313px"}),
-        html.P(str(TupleToFloat(QueryRequest(10))) + "°C",
-               style={"z-index": "2", "position": "absolute", "right": "112px", "top": "470px"}),
+def ValeurSchema():
+    valeurs = [
+        html.P(str(TupleToFloat(QueryRequest(1))) + "bar", className="HP_schema"),
+        html.P(str(TupleToFloat(QueryRequest(2))) + "bar", className="BP_schema"),
+        html.P(str(TupleToFloat(QueryRequest(3))) + "°C", className="ECP_schema"),
+        html.P(str(TupleToFloat(QueryRequest(4))) + "°C", className="SCP_schema"),
+        html.P(str(TupleToFloat(QueryRequest(5))) + "°C", className="ECD_schema"),
+        html.P(str(TupleToFloat(QueryRequest(6))) + "°C", className="SCD_schema"),
+        html.P(str(TupleToFloat(QueryRequest(7))) + "°C", className="ED_schema"),
+        html.P(str(TupleToFloat(QueryRequest(8))) + "°C", className="SD_schema"),
+        html.P(str(TupleToFloat(QueryRequest(9))) + "°C", className="SE_schema"),
+        html.P(str(TupleToFloat(QueryRequest(10))) + "°C", className="BE_schema")
     ]
 
-    return values
+    return valeurs
 
 # on génére le tableau de mesures
 
@@ -81,36 +71,26 @@ def generateTable():
         striped=True,
         hover=True,
         responsive=True,
-        style={
-            "textAlign": "center",
-            "width": "95%",
-            "bottom": "0",
-            "top": "0"})
+    )
 
 
 body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
-                                                style={"color": "red",
-                                                       "textAlign": "center"}),
-                                        ],
+                                                className="Titre_page"),
+                                        ],width=12,
                                        ),
                                ]),
                       dbc.Row([dbc.Col([html.Div(generateTable(),
                                id="table-data",
-                               style={"margin-top": "35px",
-                                       "z-index": "2"})],
+                                                 )],width=6
                                        ),
-                               dbc.Col([html.Img(src=app.get_asset_url('schema.png'),
-                                                 style={"position": "absolute",
-                                                        "top": "120px",
-                                                        "right": "120px",
-                                                        "z-index": "1"}),
-                                        html.Div(ValueSchema(),
-                                                 style={"color": "blue",
-                                                        "font-size": "12px"})])]),
-                      dbc.Row([dbc.Col([html.Img(src=app.get_asset_url('diagramme.png'),)],
+                               dbc.Col([html.Div(children=[html.Img(src=app.get_asset_url('schema.png'),
+                                                                    className="image_schema"),
+                                                           html.Div(ValeurSchema(),
+                                                                    className="Tv_schema")])],width=6)]),
+                      dbc.Row([dbc.Col([html.Img(src=app.get_asset_url('diagramme.png'),
+                                                 )],width=12,
                                        ),
                                ]),
-
                       ])
 # app.layout détermine la structure d'un tableau de bord et décrit
 # l'aspect de l'application
@@ -128,14 +108,3 @@ def update_table(interval):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-
-"""
-
-engine = create_engine("mysql://pierre:azerty@localhost/test")
-
-source_connection = engine.connect()
-
-df = pandas.read_sql("SELECT * FROM inventory", con=engine)
-PASSTOKEN = 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
-"""
