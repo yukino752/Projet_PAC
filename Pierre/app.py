@@ -17,24 +17,43 @@ DIA = DiagrammeEnthalpie()
 DIA.creer_diagramme()
 # On positionne les mesures sur le schéma de PAC
 
-
 def ValeurSchema():
+    """
+    Cette fonction récupère des valeurs de mesure à partir d'une requête SQL et les place dans une liste d'éléments HTML
+    correspondant à des paragraphes contenant la valeur de mesure et une classe CSS associée.
+
+    Returns:
+        list: Une liste d'éléments HTML représentant les valeurs de mesure.
+    """
+    # Récupération des valeurs de mesure à partir de la base de données via une requête SQL.
+    hp = TupleToFloat(QueryRequest(1))  # pression haute pression
+    bp = TupleToFloat(QueryRequest(2))  # pression basse pression
+    ecp = TupleToFloat(QueryRequest(3))  # Entrée du compresseur
+    scp = TupleToFloat(QueryRequest(4))  # Sortie du compresseur
+    ecd = TupleToFloat(QueryRequest(5))  # Entrée du condenseur
+    scd = TupleToFloat(QueryRequest(6))  # Sortie du condenseur
+    ed = TupleToFloat(QueryRequest(7))  # Entrée du detenteur
+    sd = TupleToFloat(QueryRequest(8))  # Sortie d'évaporateur
+    se = TupleToFloat(QueryRequest(9))  # Sortie d'évaporateur
+    be = TupleToFloat(QueryRequest(10))  # boîte à expansion
+
+    # Création d'une liste d'éléments HTML pour chaque mesure récupérée.
     valeurs = [
-        html.P(str(TupleToFloat(QueryRequest(1))) + "bar", className="HP_schema"),
-        html.P(str(TupleToFloat(QueryRequest(2))) + "bar", className="BP_schema"),
-        html.P(str(TupleToFloat(QueryRequest(3))) + "°C", className="ECP_schema"),
-        html.P(str(TupleToFloat(QueryRequest(4))) + "°C", className="SCP_schema"),
-        html.P(str(TupleToFloat(QueryRequest(5))) + "°C", className="ECD_schema"),
-        html.P(str(TupleToFloat(QueryRequest(6))) + "°C", className="SCD_schema"),
-        html.P(str(TupleToFloat(QueryRequest(7))) + "°C", className="ED_schema"),
-        html.P(str(TupleToFloat(QueryRequest(8))) + "°C", className="SD_schema"),
-        html.P(str(TupleToFloat(QueryRequest(9))) + "°C", className="SE_schema"),
-        html.P(str(TupleToFloat(QueryRequest(10))) + "°C", className="BE_schema")
+        html.P(str(hp) + "bar", className="HP_schema"),  # pression haute pression
+        html.P(str(bp) + "bar", className="BP_schema"),  # pression basse pression
+        html.P(str(ecp) + "°C", className="ECP_schema"),  # Entrée du compresseur
+        html.P(str(scp) + "°C", className="SCP_schema"),  # Sortie du compresseur
+        html.P(str(ecd) + "°C", className="ECD_schema"),  # Entrée du condenseur
+        html.P(str(scd) + "°C", className="SCD_schema"),  # Sortie du condenseur
+        html.P(str(ed) + "°C", className="ED_schema"),  # Entrée du detenteur
+        html.P(str(sd) + "°C", className="SD_schema"),  # Sortie du detenteur
+        html.P(str(se) + "°C", className="SE_schema"),  # Sortie d'évaporateur
+        html.P(str(be) + "°C", className="BE_schema")  # Bac d'eau
     ]
 
+    # Retourne la liste d'éléments HTML représentant les valeurs de mesure.
     return valeurs
 
-# on génére le tableau de mesures
 
 
 def generateTable():
