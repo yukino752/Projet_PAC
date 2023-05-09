@@ -29,7 +29,7 @@
     top: 220px;}
 
 .ECD_schema {
-    /* valeur "Sortie du condenseur" en °C */
+    /* valeur "Entrée du condenseur" en °C */
     z-index: 2;
     position: absolute;
     right: 130px;
@@ -50,7 +50,7 @@
     top: 530px;}
 
 .SD_schema {
-    /* valeur "Entrée du detenteur" en °C */
+    /* valeur "Sortie du detenteur" en °C */
     z-index: 2;
     position: absolute;
     right: 475px;
