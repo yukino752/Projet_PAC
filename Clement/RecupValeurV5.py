@@ -16,9 +16,9 @@ def signal_handler(sig, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-def read_capteur(liaison_serie, point_de_mesure):
-    assert isinstance(point_de_mesure, str), "point_de_mesure est du mauvais type : " + type(point_de_mesure)
-    print("DEBUG 0 : point de mesure = " + point_de_mesure)
+def read_capteur(liaison_serie):
+    #assert isinstance(point_de_mesure, str), "point_de_mesure est du mauvais type : " + type(point_de_mesure)
+    #print("DEBUG 0 : point de mesure = " + point_de_mesure)
     #answer = str(arduino.readline())
     #print("réponse : " + answer)
     message = liaison_serie.readline().decode('utf-8', errors="replace")
@@ -40,6 +40,9 @@ def read_capteur(liaison_serie, point_de_mesure):
     assert match is not None, "valeur de mesure invalide"
     valeur_mesure = float(match.group(0))
 
+    for reponse in [r'[0-9]+(\.[0-9]+)?\r?\n$']:
+        capteur = re.sub(reponse, '', message)
+
     clef = message
     for motif in [r'[0-9]+(\.[0-9]+)?\r?\n$', '^(temperature|basse|haute)', 'Entree|Sortie']:
         clef = re.sub(motif, '', clef)
@@ -49,9 +52,10 @@ def read_capteur(liaison_serie, point_de_mesure):
 
     dispositif_func = dispositif_switcher[clef]
 
-    validite_min, validite_max = Select_validite(point_de_mesure)
+    validite_min, validite_max = Select_validite(capteur)
     print(validite_min)
-    id_capteur = Select_id_Capteur(point_de_mesure)
+    print(validite_max)
+    id_capteur = Select_id_Capteur(capteur)
     id_releve = 1
     if valeur_mesure>validite_min and valeur_mesure<validite_max:
         dispositif_func(valeur_mesure, id_capteur, id_releve)
