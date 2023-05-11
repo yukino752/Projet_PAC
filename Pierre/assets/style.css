@@ -1,0 +1,101 @@
+/*---------------------- Styles des valeurs du schéma PAC - -----------------------*/
+
+.HP_schema {
+    /* valeur "Haute Pression" en bar */
+    z-index: 2;
+    position: absolute;
+    right: 400px;
+    top: 363px;}
+
+.BP_schema {
+    /* valeur "Basse Pression" en bar */
+    z-index: 2;
+    position: absolute;
+    right: 463px;
+    top: 363px;}
+
+.ECP_schema {
+    /* valeur "Entrée du compresseur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 460px;
+    top: 249px;}
+
+.SCP_schema {
+    /* valeur "Sortie du compresseur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 403px;
+    top: 220px;}
+
+.ECD_schema {
+    /* valeur "Entrée du condenseur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 130px;
+    top: 130px;}
+
+.SCD_schema {
+    /* valeur "Sortie du condenseur" en °C */
+   z-index: 2;
+    position: absolute;
+    right: 275px;
+    top: 140px;}
+
+.ED_schema {
+    /* valeur "Entrée du detenteur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 397px;
+    top: 530px;}
+
+.SD_schema {
+    /* valeur "Sortie du detenteur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 475px;
+    top: 530px;}
+
+.SE_schema {
+    /* valeur "Sortie d'évaporateur" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 560px;
+    top: 313px;
+    }
+
+.BE_schema {
+    /* valeur "Bac d'eau" en °C */
+    z-index: 2;
+    position: absolute;
+    right: 112px;
+    top: 470px;}
+
+.image_schema{
+    position: absolute;
+    top: 120px;
+    right: 120px;
+
+}
+
+.Tv_schema{
+    color: red;
+    font-size: 12px;
+}
+
+/*---------------------------------------------------------------------*/
+
+.Titre_page {
+    /* titre principal de la page */
+    color: red;
+    text-align: center;
+}
+
+#table-data {
+    z-index: 2;
+    margin-top: 60px;
+    text-align: center;
+    width: 95 % ;
+    bottom: 0;
+    top: 0;
+}

@@ -1,59 +1,77 @@
 import mysql.connector
 from CreateDatabase import connectDB
 
-#########################################################################################################
-############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur Compresseur ############
-
 def Compresseur(Valeur, id_capteur, id_releve):
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur))
-    conn.commit()
-
-#########################################################################################################
-############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur Condenseur ############
+    """
+    Cette fonction ajoute une mesure de la valeur d'un capteur associé à un relevé dans la table 'mesure' de la base de données.
+    :param Valeur: la valeur du capteur à ajouter
+    :param id_capteur: l'ID du capteur
+    :param id_releve: l'ID du relevé associé
+    """
+    conn = connectDB() # Connexion à la base de données
+    cursor = conn.cursor() # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur)) # Exécution de la requête SQL pour ajouter une mesure
+    conn.commit() # Validation des changements dans la base de données
 
 def Condenseur (Valeur, id_capteur, id_releve):
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur))
-    conn.commit()
-
-#########################################################################################################
-############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur Detendeur ############
+    """
+    Cette fonction ajoute une mesure de la valeur d'un capteur associé à un relevé dans la table 'mesure' de la base de données.
+    :param Valeur: la valeur du capteur à ajouter
+    :param id_capteur: l'ID du capteur
+    :param id_releve: l'ID du relevé associé
+    """
+    conn = connectDB() # Connexion à la base de données
+    cursor = conn.cursor() # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur)) # Exécution de la requête SQL pour ajouter une mesure
+    conn.commit() # Validation des changements dans la base de données
 
 def Detendeur (Valeur, id_capteur, id_releve):
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur))
-    conn.commit()
+    """
+    Cette fonction ajoute une mesure de la valeur d'un capteur associé à un relevé dans la table 'mesure' de la base de données.
+    :param Valeur: la valeur du capteur à ajouter
+    :param id_capteur: l'ID du capteur
+    :param id_releve: l'ID du relevé associé
+    """
+    conn = connectDB() # Connexion à la base de données
+    cursor = conn.cursor() # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur)) # Exécution de la requête SQL pour ajouter une mesure
+    conn.commit() # Validation des changements dans la base de données
 
-#########################################################################################################
-############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur Evaporateur ############
+def Evaporateur(Valeur, id_capteur, id_releve):
+    """
+    Cette fonction ajoute une mesure de la valeur d'un capteur associé à un relevé dans la table 'mesure' de la base de données.
+    :param Valeur: la valeur du capteur à ajouter
+    :param id_capteur: l'ID du capteur
+    :param id_releve: l'ID du relevé associé
+    """
+    conn = connectDB()  # Connexion à la base de données
+    cursor = conn.cursor()  # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);",
+                   (id_releve, id_capteur, Valeur))  # Exécution de la requête SQL pour ajouter une mesure
+    conn.commit()  # Validation des changements dans la base de données
 
-def Evaporateur (Valeur, id_capteur, id_releve):
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur))
-    conn.commit()
-
-#########################################################################################################
-############ Fonction pour insérer les valeurs reçu de l'elève 2 avec le capteur de l'eau ############
-
-def Eau (Valeur, id_capteur, id_releve):
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);", (id_releve, id_capteur, Valeur))
-    conn.commit()
-
-#########################################################################################################
-############ Fonction pour insérer le releve avec la date ############
+def Eau(Valeur, id_capteur, id_releve):
+    """
+    Cette fonction ajoute une mesure de la valeur d'un capteur associé à un relevé dans la table 'mesure' de la base de données.
+    :param Valeur: la valeur du capteur à ajouter
+    :param id_capteur: l'ID du capteur
+    :param id_releve: l'ID du relevé associé
+    """
+    conn = connectDB()  # Connexion à la base de données
+    cursor = conn.cursor()  # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute("INSERT INTO mesure (fk_id_releve, fk_id_capteur, valeur) VALUES (%s, %s, %s);",
+                   (id_releve, id_capteur, Valeur))  # Exécution de la requête SQL pour ajouter une mesure
+    conn.commit()  # Validation des changements dans la base de données
 
 def Releve():
-    conn = connectDB()
-    cursor = conn.cursor()
-    cursor.execute ("INSERT INTO releve (date) VALUES (CURRENT_TIMESTAMP);")
-    conn.commit()
+    """
+    Cette fonction ajoute un relevé avec la date actuelle dans la table 'releve' de la base de données.
+    """
+    conn = connectDB()  # Connexion à la base de données
+    cursor = conn.cursor()  # Création d'un curseur pour exécuter les requêtes SQL
+    cursor.execute("INSERT INTO releve (date) VALUES (CURRENT_TIMESTAMP);")  # Exécution de la requête SQL pour ajouter un relevé
+    conn.commit()  # Validation des changements dans la base de données
+
 
 #########################################################################################################
 ############ Trigger ############

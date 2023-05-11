@@ -1,55 +1,106 @@
 import mysql.connector 
 from CreateDatabase import connectDB
 
-#########################################################################################################
-############ Selection de l'id du capteur qui permettra de remplir la table mesure de la bdd ############
 
 def Select_id_Capteur(Capteur):
-    conn = connectDB()
-    cursor = conn.cursor(buffered=True) #La raison en est que sans curseur tamponné, 
-                                        #les résultats sont chargés "paresseusement", 
-                                        # ce qui signifie que "fetchone" ne récupère en fait qu'une seule 
-                                        # ligne de l'ensemble des résultats de la requête. 
-                                        # Lorsque vous utiliserez à nouveau le même curseur, 
-                                        # il se plaindra que vous avez encore n-1 résultats 
-                                        # (où n est le nombre de résultats) en attente d'être récupérés. 
-                                        # Cependant, lorsque vous utilisez un curseur tamponné, le 
-                                        # connecteur récupère TOUTES les lignes en arrière-plan et 
-                                        # vous n'en prenez qu'une du connecteur, 
-                                        # de sorte que la base de données mysql ne se plaindra pas.
-    cursor.execute ('SELECT id FROM Capteur WHERE nom_Capteur LIKE \'%' + Capteur + '%\'');
-    result = cursor.fetchone() # Fetchone retourne un tuple
-    id = result[0] # il faut donc selectionner ce qui nous intéresse dans les tupples ici c'est le numéro de l'id
-    conn.commit
-    return id # On retourne la valeur de l'id correspondant au capteur, qui sera exploité par l'elève 2
+    """
+    Renvoie l'ID d'un capteur en fonction de son nom.
 
-#########################################################################################################
-############ Selection de la validite pour que la central d'acquisition sache si la valeur est correct ############
+    Paramètres :
+    -------------
+    Capteur : str
+        Nom du capteur dont on veut récupérer l'ID.
+
+    Retour :
+    --------
+    id : int
+        ID du capteur.
+    """
+
+    # Connexion à la base de données.
+    conn = connectDB()
+    cursor = conn.cursor(buffered=True)
+
+    # Exécution de la requête SQL pour récupérer l'ID du capteur.
+    cursor.execute ('SELECT id FROM Capteur WHERE nom_Capteur LIKE \'%' + Capteur + '%\'')
+    result = cursor.fetchone()
+
+    # Récupération de l'ID du capteur.
+    id = result[0] 
+
+    # Commit de la transaction et retour de l'ID du capteur.
+    conn.commit()
+    return id 
+
+
 
 def Select_validite(Capteur):
+    """
+    Renvoie les limites de validité d'un capteur en fonction de son nom.
+
+    Paramètres :
+    -------------
+    Capteur : str
+        Nom du capteur dont on veut récupérer les limites de validité.
+
+    Retour :
+    --------
+    validite_min : float
+        Valeur minimale de validité du capteur.
+    validite_max : float
+        Valeur maximale de validité du capteur.
+    """
+
+    # Connexion à la base de données.
     conn = connectDB()
     cursor = conn.cursor(buffered=True)
+
+    # Exécution de la requête SQL pour récupérer les limites de validité du capteur.
     cursor.execute ('SELECT validite.minimum, validite.maximum, capteur.nom_Capteur \
                    FROM validite \
-                   INNER JOIN capteur ON validite.id = capteur.fk_validite WHERE nom_Capteur LIKE\'%' + Capteur + '%\'');
-    result = cursor.fetchone() 
-    validite_min = result[0] # On selectionne la valeur minimum de la réponse
-    validite_max = result[1] # On selectionne la valeur maximum de la réponse
-    conn.commit
-    return validite_min, validite_max # On retourne les deux valeurs qui seront exploité par l'elève 2
+                   INNER JOIN capteur ON validite.id = capteur.fk_validite WHERE nom_Capteur LIKE\'%' + Capteur + '%\'')
+    result = cursor.fetchone()
 
-#########################################################################################################
-############ Selection du mode de la pac ############
+    # Récupération des limites de validité du capteur.
+    validite_min = result[0]
+    validite_max = result[1] 
 
-def Select_mode (id_mode):
+    # Commit de la transaction et retour des limites de validité du capteur.
+    conn.commit()
+    return validite_min, validite_max 
+
+
+
+def Select_mode(id_mode):
+    """
+    Renvoie le mode d'un PAC en fonction de son ID.
+
+    Paramètres :
+    -------------
+    id_mode : int
+        ID du PAC dont on veut récupérer le mode.
+
+    Retour :
+    --------
+    mode : str
+        Mode du PAC.
+    """
+
+    # Connexion à la base de données.
     conn = connectDB()
     cursor = conn.cursor(buffered=True)
-    cursor.execute ('SELECT mode FROM pac WHERE id LIKE \'%' + str(id_mode) + '%\'');
-    result = cursor.fetchone() # Fetchone retourne un tuple
+
+    # Exécution de la requête SQL pour récupérer le mode du PAC.
+    cursor.execute ('SELECT mode FROM pac WHERE id LIKE \'%' + str(id_mode) + '%\'')
+    result = cursor.fetchone() 
+
+    # Récupération du mode du PAC.
     mode = result[0]
-    conn.commit
-    return mode # On retourne la valeur du mode choisi qui sera exploité par l'elève 2
- 
+
+    # Commit de la transaction et retour du mode du PAC.
+    conn.commit()
+    return mode
+
 #########################################################################################################
 
 """
