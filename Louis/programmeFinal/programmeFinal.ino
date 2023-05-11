@@ -6,6 +6,9 @@
 #define RREF      430.0  //Résistance de référence
 #define RNOMINAL  100.0  //Résistance nominale
 
+//Temps en minute pour l'état stable
+#define tempsEtatStable 10
+
 /*
 //THERMOCOUPLE ENTREE DETENDEUR
 int thermoSO1 = 22;
@@ -44,7 +47,7 @@ int thermoSCK7 = 42;
 */
 
 
-// Assignation des broches pour les thermocouples et la sonde PT100
+// Assignation des broches pour les thermocouples et la sonde PT100 avec une énumération
 enum{
   thermoSO1 = 22, thermoCS1, thermoSCK1,     //THERMOCOUPLE ENTREE DETENDEUR
   thermoSO2, thermoCS2, thermoSCK2,          //THERMOCOUPLE SORTIE DETENDEUR
@@ -75,6 +78,27 @@ MAX6675 thermocoupleSortieEvaporateur(thermoSCK7, thermoCS7, thermoSO7);
 //Initialisation des amplificateurs MAX31865 pour la sonde PT100
 MAX31865 pt100 = MAX31865(pt100CS, pt100SDI, pt100SDO, pt100CLK);
 
+// Définition de la classe pour le temps écoulé
+class tempsEcoule
+{
+  public:
+    float temps, tempsSecondes, tempsMinutes;
+    float affichageTemps(){
+      temps = millis();
+      tempsSecondes = temps/1000;
+      Serial.print("tempsSecondes");
+      Serial.println(tempsSecondes, 0);
+      delay(1000);
+
+      tempsMinutes = temps/1000/60;
+      Serial.print("tempsMinutes");
+      Serial.println(tempsMinutes);
+      delay(1000);
+    }
+
+};
+
+
 // Définition de la classe pour les températures des thermocouples
 class temperatureThermocouples
 {
@@ -104,12 +128,31 @@ class temperatureThermocouples
 class temperaturePT100
 {
   public:
+    bool valeurAjoutee1 = false, valeurAjoutee2 = false;
+    float tempInitiale, tempFinale;
     // Lecture de la température pour la sonde PT100
-    float readTemperaturePT100(){
+    float readTemperaturePT100(tempsEcoule tempsPT100){
+      float tempEau = pt100.temperature(RNOMINAL, RREF);
       Serial.print("temperatureEau"); 
-      Serial.println(pt100.temperature(RNOMINAL, RREF));
+      Serial.println(tempEau);
       delay(1000);
-   }
+
+      // Assignation à une variable tempInitiale de la température de l'eau à 0min
+      if(tempsPT100.tempsMinutes >= 0 && !valeurAjoutee1){
+        tempInitiale = tempEau;
+        valeurAjoutee1 = true;
+      }
+
+      // Assignation à une variable tempFinale de la température de l'eau à l'état stable, et calcul et affichage du COP réel
+      if(tempsPT100.tempsMinutes >= tempsEtatStable && !valeurAjoutee2){
+        tempFinale = tempEau;
+        valeurAjoutee2 = true;
+        Serial.print("copReel");
+        Serial.println((18*4185*(tempFinale-tempInitiale))/(29.8*tempsEtatStable));
+        delay(1000);
+      }
+    
+    }
 
 };
 
@@ -136,6 +179,7 @@ class pressionCapteurs
 
 };
 
+
 void setup() {
   Serial.begin(9600);
   //Initialisation de l'amplificateur MAX31865 pour la sonde PT100 (2 fils)
@@ -144,21 +188,15 @@ void setup() {
   
 }
 
+tempsEcoule temps;
 temperatureThermocouples thermocouples;
 temperaturePT100 temperatureEau;
 pressionCapteurs pression;
 
 void loop() {
-  thermocouples.readTemperaturePT100();
-  temperatureEau.readPT100();
+  thermocouples.readTemperature();
+  temperatureEau.readTemperaturePT100(temps);
   pression.readPression();
+  temps.affichageTemps();
   
-  float temps = millis();
-  Serial.print("tempsSecondes");
-  Serial.println(temps/1000, 0);
-  delay(1000);
-  Serial.print("tempsMinutes");
-  Serial.println(temps/1000/60);
-  delay(1000);
-
 }
