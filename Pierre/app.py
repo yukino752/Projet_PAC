@@ -33,9 +33,9 @@ def ValeurSchema():
     ecd = TupleToFloat(QueryRequest(5))  # Entrée du condenseur
     scd = TupleToFloat(QueryRequest(6))  # Sortie du condenseur
     ed = TupleToFloat(QueryRequest(7))  # Entrée du detenteur
-    sd = TupleToFloat(QueryRequest(8))  # Sortie d'évaporateur
+    sd = TupleToFloat(QueryRequest(8))  # Sortie du detenteur
     se = TupleToFloat(QueryRequest(9))  # Sortie d'évaporateur
-    be = TupleToFloat(QueryRequest(10))  # boîte à expansion
+    be = TupleToFloat(QueryRequest(10))  # Bac d'eau
 
     # Création d'une liste d'éléments HTML pour chaque mesure récupérée.
     valeurs = [
