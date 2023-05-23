@@ -330,4 +330,4 @@ class DiagrammeEnthalpie:
         plt.grid(which='both')  # Rajout de la grille
         plt.savefig(
             r"/tmp/diag.png".format(
-                self.FLUIDE))
+                self.FLUIDE),transparent=True)
