@@ -105,6 +105,7 @@ body = dbc.Container([dbc.Row([dbc.Col([html.H1("PAC Dashboard",
                                dbc.Col([html.Div(children=[html.Img(src=app.get_asset_url('schema.png'),
                                                                     className="image_schema"),
                                                            html.Div(ValeurSchema(),
+                                                                    id="Schema",
                                                                     className="Tv_schema")])],width=6)]),
                       dbc.Row([dbc.Col([html.Img(src=app.get_asset_url('diagramme.png'),
                                                  )],width=12,
@@ -124,6 +125,10 @@ app.layout = html.Div([body, dcc.Interval(
 def update_table(interval):
     return generateTable()
 
+@app.callback(Output('Schema', 'children'),
+              [Input('interval-component', 'n_intervals')])
+def update_schema(interval):
+    return ValeurSchema()
 
 if __name__ == '__main__':
     app.run_server(debug=True)
