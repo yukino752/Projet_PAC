@@ -1,3 +1,7 @@
+body{
+    background-color: #edf5f8;
+}
+
 /*---------------------- Styles des valeurs du schéma PAC - -----------------------*/
 
 .HP_schema {
@@ -50,7 +54,7 @@
     top: 530px;}
 
 .SD_schema {
-    /* valeur "Sortie du detenteur" en °C */
+    /* valeur "Entrée du detenteur" en °C */
     z-index: 2;
     position: absolute;
     right: 475px;
@@ -78,10 +82,12 @@
 
 }
 
-.Tv_schema{
+#Schema{
     color: red;
     font-size: 12px;
+
 }
+
 
 /*---------------------------------------------------------------------*/
 
@@ -93,9 +99,11 @@
 
 #table-data {
     z-index: 2;
-    margin-top: 60px;
+    margin-top: 50px;
     text-align: center;
     width: 95 % ;
     bottom: 0;
     top: 0;
+
 }
+
