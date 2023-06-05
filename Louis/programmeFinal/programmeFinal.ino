@@ -88,12 +88,12 @@ class tempsEcoule
       tempsSecondes = temps/1000;
       Serial.print("tempsSecondes");
       Serial.println(tempsSecondes, 0);
-      delay(1000);
+      delay(1500);
 
       tempsMinutes = temps/1000/60;
       Serial.print("tempsMinutes");
       Serial.println(tempsMinutes);
-      delay(1000);
+      delay(1500);
     }
 
 };
@@ -119,7 +119,7 @@ class temperatureThermocouples
       for (int i = 0; i < numThermocouples; i++) {
         Serial.print(thermocoupleNames[i]);
         Serial.println(thermocouples[i]->readCelsius());
-        delay(1000);
+        delay(1500);
       }
     }
 };
@@ -135,7 +135,7 @@ class temperaturePT100
       float tempEau = pt100.temperature(RNOMINAL, RREF);
       Serial.print("temperatureEau"); 
       Serial.println(tempEau);
-      delay(1000);
+      delay(1500);
 
       // Assignation à une variable tempInitiale de la température de l'eau à 0min
       if(tempsPT100.tempsMinutes >= 0 && !valeurAjoutee1){
@@ -148,7 +148,7 @@ class temperaturePT100
         tempFinale = tempEau;
         valeurAjoutee2 = true;
         Serial.print("copReel");
-        Serial.println((18*4185*(tempFinale-tempInitiale))/(29.8*tempsEtatStable));
+        Serial.println((18*4185*(tempFinale-tempInitiale))/(500*tempsEtatStable*60));
         delay(1000);
       }
     
@@ -166,22 +166,22 @@ class pressionCapteurs
       float BassePression = (7.3/818.4)*(rawBassePression-(1023*0.5/5));
       //Serial.println(rawBassePression);
       Serial.print("bassePression");
-      Serial.println(BassePression+1);
-      delay(1000);
+      Serial.println(BassePression);
+      delay(2000);
 
       float rawHautePression = analogRead(capteurHautePression);
       float HautePression = (34.5/818.4)*(rawHautePression-(1023*0.5/5));
       //Serial.println(rawHautePression);
       Serial.print("hautePression");
-      Serial.println(HautePression+1);
-      delay(1000);
+      Serial.println(HautePression);
+      delay(2000);
    }
 
 };
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   //Initialisation de l'amplificateur MAX31865 pour la sonde PT100 (2 fils)
   pt100.begin(MAX31865_2WIRE);
   delay(500);
