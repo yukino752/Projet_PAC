@@ -164,14 +164,12 @@ class pressionCapteurs
     float readPression(){
       float rawBassePression = analogRead(capteurBassePression);
       float BassePression = (7.3/818.4)*(rawBassePression-(1023*0.5/5));
-      //Serial.println(rawBassePression);
       Serial.print("bassePression");
       Serial.println(BassePression);
       delay(2000);
 
       float rawHautePression = analogRead(capteurHautePression);
       float HautePression = (34.5/818.4)*(rawHautePression-(1023*0.5/5));
-      //Serial.println(rawHautePression);
       Serial.print("hautePression");
       Serial.println(HautePression);
       delay(2000);
