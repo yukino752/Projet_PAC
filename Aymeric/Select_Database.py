@@ -97,6 +97,37 @@ def Select_periodicite():
     conn.commit()  # Valider les modifications effectuées dans la base de données
     return periodicite  # Retourner la périodicité récupérée
 
+def Select_nb_tentative():
+    """
+    Cette fonction sélectionne le nombre de tentative depuis la table 'central_acquisition'.
+
+    Returns:
+        str: Le nombre de tentative récupérée depuis la base de données.
+    """
+    conn = connectDB()  # Établir la connexion à la base de données
+    cursor = conn.cursor(buffered=True)  # Créer un curseur pour exécuter des requêtes SQL
+    cursor.execute('SELECT nb_tentative FROM central_acquisition')  # Exécuter la requête SQL 
+                                                                   #pour récupérer le nombre de tentative
+    result = cursor.fetchone()  # Récupérer le premier résultat de la requête
+    nb_tentative = result[0]  # Extraire la périodicité de la première colonne du résultat
+    conn.commit()  # Valider les modifications effectuées dans la base de données
+    return nb_tentative  # Retourner la périodicité récupérée
+
+def Select_delai_expiration():
+    """
+    Cette fonction sélectionne la périodicité depuis la table 'central_acquisition'.
+
+    Returns:
+        str: La périodicité récupérée depuis la base de données.
+    """
+    conn = connectDB()  # Établir la connexion à la base de données
+    cursor = conn.cursor(buffered=True)  # Créer un curseur pour exécuter des requêtes SQL
+    cursor.execute('SELECT delai_expiration FROM central_acquisition')  # Exécuter la requête SQL 
+                                                                   #pour récupérer le delai_expiration
+    result = cursor.fetchone()  # Récupérer le premier résultat de la requête
+    delai_expiration = result[0]  # Extraire la périodicité de la première colonne du résultat
+    conn.commit()  # Valider les modifications effectuées dans la base de données
+    return delai_expiration  # Retourner la périodicité récupérée
 
 #########################################################################################################
 
