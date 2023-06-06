@@ -317,6 +317,7 @@ class DiagrammeEnthalpie:
                   self.BP,
                   self.HP],
                  "-rs")
+        plt.plot([0, self.DetenteurE], [self.BP, self.BP], "--c")
         plt.plot([0, self.DetenteurE], [0, self.HP], "--c")
         plt.plot([0, self.CompresseurS], [0, self.HP], "--c")
         plt.plot([0, self.CompresseurE], [0, self.BP], "--c")
