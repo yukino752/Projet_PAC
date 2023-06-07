@@ -7,7 +7,7 @@
 #define RNOMINAL  100.0  //Résistance nominale
 
 //Temps en minute pour l'état stable
-#define tempsEtatStable 10
+#define tempsEtatStable 60
 
 /*
 //THERMOCOUPLE ENTREE DETENDEUR
@@ -164,12 +164,14 @@ class pressionCapteurs
     float readPression(){
       float rawBassePression = analogRead(capteurBassePression);
       float BassePression = (7.3/818.4)*(rawBassePression-(1023*0.5/5));
+      delay(200);
       Serial.print("bassePression");
       Serial.println(BassePression);
       delay(2000);
 
       float rawHautePression = analogRead(capteurHautePression);
       float HautePression = (34.5/818.4)*(rawHautePression-(1023*0.5/5));
+      delay(200);
       Serial.print("hautePression");
       Serial.println(HautePression);
       delay(2000);
